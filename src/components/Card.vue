@@ -21,10 +21,10 @@
                 </div>
                 <div class="card-link">
                     <a
-                        href="https://www.kocka-v-nouzi.cz"
+                        v-bind:href="'https://' + cardLinks[index - 1]"
                         target="_blank"
                         id="card-link"
-                        >www.kocka-v-nouzi.cz</a
+                        >{{ cardLinks[index - 1] }}</a
                     >
                 </div>
                 <div class="collected-money">Vybráno</div>
@@ -58,6 +58,14 @@ export default {
                 "Matky potřebují pomoc",
                 "Aperio",
                 "Pro milovníky koček",
+            ],
+            cardLinks: [
+                "www.breastcancer.cz",
+                "www.zsalsa.cz",
+                "www.cestazasnem.cz",
+                "www.klubsvobodnychmatek.cz",
+                "aperio.cz",
+                "www.dasenka-utulek.cz",
             ],
         };
     },
@@ -99,14 +107,12 @@ $main-text-color: #34404b;
 }
 .card-description {
     margin: 10px 0px 10px 0px;
-    font-family: "Open Sans", sans-serif;
     font-size: 0.95rem;
     color: $main-text-color;
 }
 .card-link {
     margin-bottom: 20px;
     text-decoration: none;
-    font-family: "Open Sans", sans-serif;
 }
 #card-link:link,
 #card-link:visited,
@@ -116,9 +122,8 @@ $main-text-color: #34404b;
 }
 .collected-money {
     text-align: right;
-    font-family: "Open Sans", sans-serif;
-    font-size: 0.7rem;
-    color: #b8b8b8;
+    font-size: 0.8rem;
+    color: black;
 }
 .card-price-container {
     display: flex;
@@ -126,8 +131,7 @@ $main-text-color: #34404b;
     align-items: center;
 }
 .price {
-    font-family: "Open Sans", sans-serif;
-    font-size: 1.2rem;
+    font-size: 1.4rem;
     font-weight: 600;
     color: $main-accent-color;
 }

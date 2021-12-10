@@ -76,6 +76,9 @@ export default {
 </script>
 
 <style lang="scss">
+* {
+    font-family: "Open Sans", sans-serif;
+}
 @import url("https://fonts.googleapis.com/css2?family=Open+Sans:wght@500;700&family=Pacifico&display=swap");
 $main-accent-color: #e50019;
 $main-text-color: #34404b;
@@ -118,10 +121,10 @@ $main-text-color: #34404b;
 }
 .second-header,
 .third-header {
-    font-size: 2.5rem;
+    font-size: 2.7rem;
 }
 .second-header {
-    padding: 30px 0px 30px 0px;
+    padding: 30px 0px 40px 0px;
 }
 .third-header {
     margin-top: 50px;
@@ -129,7 +132,6 @@ $main-text-color: #34404b;
 .subheader {
     text-align: center;
     margin-top: 30px;
-    font-family: "Open Sans", sans-serif;
     font-size: 1.5rem;
     color: $main-text-color;
 }
@@ -143,10 +145,10 @@ $main-text-color: #34404b;
     border-radius: 3px;
     margin: 30px;
     padding: 15px 40px 15px 40px;
-    font-family: "Open Sans", sans-serif;
     font-size: 0.9rem;
     background-color: #4e9dc8;
     color: white;
+    transition: 0.3s;
 }
 #blue-button:link,
 #blue-button:visited,
@@ -156,11 +158,12 @@ $main-text-color: #34404b;
 }
 .blue-button:hover {
     cursor: pointer;
+    background-color: #3d81a7;
+    transition: 0.3s;
 }
 .description {
     margin: 80px 150px 80px 150px;
     text-align: center;
-    font-family: "Open Sans", sans-serif;
     font-size: 1.1rem;
     color: $main-text-color;
 }
@@ -168,13 +171,16 @@ $main-text-color: #34404b;
     border-radius: 3px;
     border: 1px solid $main-accent-color;
     padding: 10px 40px 10px 40px;
-    font-family: "Open Sans", sans-serif;
     font-size: 0.9rem;
     color: $main-accent-color;
     background: none;
+    transition: 0.3s;
 }
 .red-button:hover {
     cursor: pointer;
+    background-color: $main-accent-color;
+    color: white;
+    transition: 0.3s;
 }
 .email-form {
     display: flex;
@@ -183,7 +189,6 @@ $main-text-color: #34404b;
 }
 label {
     margin: 15px;
-    font-family: "Open Sans", sans-serif;
     color: #707070;
 }
 input,
@@ -193,7 +198,6 @@ textarea {
     padding: 10px 30px 10px 30px;
     border-radius: 3px;
     border: 1px solid #cecece;
-    font-family: "Open Sans", sans-serif;
     color: #34404bbd;
 }
 ::placeholder {
@@ -202,7 +206,6 @@ textarea {
 p {
     text-align: center;
     margin: 100px 250px -100px 250px;
-    font-family: "Open Sans", sans-serif;
     font-size: 0.9rem;
     color: #707070;
 }
@@ -212,6 +215,30 @@ p {
     }
     p {
         margin-bottom: -300px;
+    }
+}
+@media screen and (max-width: 374px) {
+    .card-bottom {
+        position: relative;
+    }
+    .card-price-container {
+        display: flex;
+        flex-direction: column;
+    }
+    .card-link {
+        font-size: 0.8rem;
+    }
+    .red-button {
+        width: 100%;
+    }
+    .price {
+        margin-top: 30px;
+    }
+    .collected-money {
+        position: absolute;
+        bottom: 9%;
+        left: 50%;
+        transform: translateX(-50%);
     }
 }
 @media screen and (max-width: 700px) {
@@ -230,10 +257,10 @@ p {
     }
     .second-header,
     .third-header {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     .second-header {
-        padding: 30px;
+        padding: 30px 30px 40px 30px;
     }
     .subheader {
         font-size: 1rem;
@@ -261,20 +288,25 @@ p {
     }
 }
 @media screen and (min-width: 700px) and (max-width: 1200px) {
+    .logo {
+        height: 100px;
+        width: auto;
+        margin: 15px;
+    }
     .header-container {
-        top: 20%;
-        transform: translateY(-20%);
+        top: 30%;
+        transform: translateY(-30%);
     }
     .first-header {
-        font-size: 3rem;
+        font-size: 2.7rem;
         margin: 0px 60px 0px 60px;
     }
     .second-header,
     .third-header {
-        font-size: 2rem;
+        font-size: 2.2rem;
     }
     .second-header {
-        padding: 30px;
+        padding: 30px 30px 40px 30px;
     }
     .third-header {
         margin-top: 30px;
