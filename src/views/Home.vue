@@ -110,6 +110,12 @@ export default {
                                 "ALREADY_VOTED":
                                 this.errorMessage = "Už jste hlasovali";
                                 break;
+                            case dogfishResponse.data.reason === "DB_ERROR" ||
+                                dogfishResponse.data.reason ===
+                                    "INSERT_DB_ERROR":
+                                this.errorMessage =
+                                    "Váš hlas se nepovedl uložit, zkuste to prosím znovu";
+                                break;
                         }
                     } else {
                         this.isError = false;
