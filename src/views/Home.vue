@@ -241,6 +241,7 @@ $main-text-color: #34404b;
     transition: 0.3s;
 }
 .red-button.clicked {
+    padding: 10px 35px 10px 35px;
     background-color: $main-accent-color;
     color: white;
 }
