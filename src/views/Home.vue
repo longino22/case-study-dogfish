@@ -32,45 +32,97 @@
         <div class="second-header" id="castka">
             Hodnota vašeho hlasu je 300 Kč
         </div>
-        <Card />
+
+        <Card v-on:chooseCharity="assignCharity" />
+
         <div class="third-header">Máte hotovo?</div>
-        <form @submit.prevent class="email-form">
+        <form class="email-form" @submit.prevent v-on:submit="vote">
             <label>Váš e-mail<sup>*</sup></label>
             <input
                 placeholder="petr.novotny@email.com"
                 type="email"
-                :model="userEmail"
-                :value="queryEmail"
+                required
+                v-model="email"
             />
             <label>Vzkaz</label>
             <textarea
                 rows="5"
                 placeholder="Chcete nám něco vzkázat? Budeme rádi."
+                v-model="comment"
             ></textarea>
-            <button class="blue-button">ODESLAT DÁREK</button>
+            <button class="blue-button" type="submit">ODESLAT DÁREK</button>
+            <div class="error-message" v-if="isError">
+                {{ errorMessage }}
+            </div>
+            <div class="success-message" v-if="isSuccess">
+                Váš hlas byl úspěšně odeslán. Děkujeme!
+            </div>
         </form>
         <p>
             Tady napsat, že mohou přispívat pouze naši zákazníci a dodavatelé a
             ať to nikam nesdílí, že hlasy neznámých osob nebuou uznány. Co zbyde
-            se přerozdělí, aby to dělalo částku 20000Kč.
+            se přerozdělí, aby to dělalo částku 20 000 Kč.
         </p>
     </div>
 </template>
 
 <script>
 import Card from "@/components/Card.vue";
+import axios from "@/axios.js";
 export default {
     components: {
         Card,
     },
     data() {
         return {
-            queryEmail: this.$route.query.email,
-            inputEmail: this.$route.query.email,
+            email: this.$route.query.email,
+            comment: "",
+            charity: "",
+            errorMessage: "",
+            isError: false,
+            isSuccess: false,
         };
     },
-    mounted() {
-        console.log(this.$route.query.email);
+    methods: {
+        assignCharity(charity) {
+            this.charity = charity;
+        },
+        async vote() {
+            try {
+                // Check if user has chosen charity
+                if (this.charity) {
+                    let dogfishResponse = await axios.post(
+                        `/?action=putvote&email=${this.email}&vote=${this.charity}&comment=${this.comment}`
+                    );
+                    console.log(dogfishResponse.data);
+
+                    // Check if e-mail is valid
+                    if (!dogfishResponse.data.success) {
+                        this.isError = true;
+                        this.isSuccess = false;
+                        switch (true) {
+                            case dogfishResponse.data.reason ===
+                                "NOT_IN_WHITELIST":
+                                this.errorMessage =
+                                    "Váš e-mail jsme nenašli v našem systému";
+                                break;
+                            case dogfishResponse.data.reason ===
+                                "ALREADY_VOTED":
+                                this.errorMessage = "Už jste hlasovali";
+                                break;
+                        }
+                    } else {
+                        this.isError = false;
+                        this.isSuccess = true;
+                    }
+                } else {
+                    this.isError = true;
+                    this.errorMessage = "Vyberte si prosím charitu";
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
     },
 };
 </script>
@@ -182,6 +234,10 @@ $main-text-color: #34404b;
     color: white;
     transition: 0.3s;
 }
+.red-button.clicked {
+    background-color: $main-accent-color;
+    color: white;
+}
 .email-form {
     display: flex;
     flex-direction: column;
@@ -199,6 +255,16 @@ textarea {
     border-radius: 3px;
     border: 1px solid #cecece;
     color: #34404bbd;
+}
+.error-message,
+.success-message {
+    font-weight: 600;
+}
+.error-message {
+    color: $main-accent-color;
+}
+.success-message {
+    color: #519259;
 }
 ::placeholder {
     opacity: 0.56;

@@ -29,7 +29,23 @@
                 </div>
                 <div class="collected-money">Vybráno</div>
                 <div class="card-price-container">
-                    <button class="red-button">PŘISPĚT</button>
+                    <button
+                        class="red-button"
+                        v-if="currentIndex != index"
+                        v-on:click="
+                            chooseCharity(index - 1),
+                                (isClicked = true),
+                                (currentIndex = index)
+                        "
+                    >
+                        PŘISPĚT
+                    </button>
+                    <button
+                        class="red-button clicked"
+                        v-if="isClicked && currentIndex == index"
+                    >
+                        VYBRÁNO
+                    </button>
                     <div class="price">2 300 Kč</div>
                 </div>
             </div>
@@ -43,6 +59,8 @@ export default {
     name: "Card",
     data() {
         return {
+            isClicked: false,
+            currentIndex: null,
             cardImagePaths: [
                 "logo-aliance-zen.png",
                 "logo-alsa.png",
@@ -68,6 +86,12 @@ export default {
                 "www.dasenka-utulek.cz",
             ],
         };
+    },
+    methods: {
+        chooseCharity(charityIndex) {
+            let charity = this.cardImagePaths[charityIndex].slice(5, -4);
+            this.$emit("chooseCharity", charity);
+        },
     },
 };
 </script>
