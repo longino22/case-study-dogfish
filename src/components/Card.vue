@@ -100,6 +100,7 @@ export default {
             let charity = this.cardImagePaths[charityIndex].slice(5, -4);
             this.$emit("chooseCharity", charity);
         },
+        // Needs refactoring
         async getDonatedAmount() {
             try {
                 let dogfishResponse = await dogfishAPI.get("/?action=getvotes");
