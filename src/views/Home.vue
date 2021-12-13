@@ -97,7 +97,10 @@ export default {
                 let dogfishResponse = await dogfishAPI.get(
                     `?action=isvoted&email=${this.email}`
                 );
-                if (dogfishResponse.data.isvoted) {
+                if (
+                    dogfishResponse.data.isvoted ||
+                    localStorage.getItem("voted") == 1
+                ) {
                     this.isSuccess = true;
                 }
             } catch (error) {
@@ -140,6 +143,7 @@ export default {
                         this.isError = false;
                         this.isSuccess = true;
                         this.closeForm = true;
+                        localStorage.setItem("voted", 1);
                     }
                 } else {
                     this.isError = true;
