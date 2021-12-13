@@ -46,15 +46,22 @@
                     >
                         VYBRÁNO
                     </button>
-                    <div class="price">2 300 Kč</div>
+                    <div class="price" v-if="donatedAmount[index - 1]">
+                        {{ donatedAmount[index - 1] * 300 }} Kč
+                    </div>
+                    <div class="price" v-else>0 Kč</div>
                 </div>
             </div>
-            <div class="progress-bar"></div>
+            <div
+                class="progress-bar"
+                v-bind:style="{ width: getProgress(donatedAmount[index - 1]) }"
+            ></div>
         </div>
     </div>
 </template>
 
 <script>
+import dogfishAPI from "@/axios.js";
 export default {
     name: "Card",
     data() {
@@ -85,6 +92,7 @@ export default {
                 "aperio.cz",
                 "www.dasenka-utulek.cz",
             ],
+            donatedAmount: [],
         };
     },
     methods: {
@@ -92,6 +100,47 @@ export default {
             let charity = this.cardImagePaths[charityIndex].slice(5, -4);
             this.$emit("chooseCharity", charity);
         },
+        async getDonatedAmount() {
+            try {
+                let dogfishResponse = await dogfishAPI.get("/?action=getvotes");
+                console.log(dogfishResponse.data);
+                this.donatedAmount.push(
+                    dogfishResponse.data.votes["aliance-zen"]
+                );
+                this.donatedAmount.push(dogfishResponse.data.votes.alsa);
+                this.donatedAmount.push(
+                    dogfishResponse.data.votes["cesta-za-snem"]
+                );
+                this.donatedAmount.push(
+                    dogfishResponse.data.votes["klub-svobodnych-matek"]
+                );
+                this.donatedAmount.push(dogfishResponse.data.votes.aperio);
+                this.donatedAmount.push(
+                    dogfishResponse.data.votes["utulek-dasenka"]
+                );
+                this.getProgress();
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
+        getProgress(vote) {
+            let sum = 0;
+            for (let i = 0; i < this.donatedAmount.length; i++) {
+                if (this.donatedAmount[i] === undefined) {
+                    sum += 0;
+                } else {
+                    sum += parseInt(this.donatedAmount[i]);
+                }
+            }
+            if (vote === undefined) {
+                return 0 + "%";
+            } else {
+                return (vote / sum) * 100 + "%";
+            }
+        },
+    },
+    created() {
+        this.getDonatedAmount();
     },
 };
 </script>

@@ -36,7 +36,12 @@
         <Card v-on:chooseCharity="assignCharity" />
 
         <div class="third-header">Máte hotovo?</div>
-        <form class="email-form" @submit.prevent v-on:submit="vote">
+        <form
+            class="email-form"
+            @submit.prevent
+            v-if="!isSuccess"
+            v-on:submit="vote"
+        >
             <label>Váš e-mail<sup>*</sup></label>
             <input
                 placeholder="petr.novotny@email.com"
@@ -54,10 +59,10 @@
             <div class="error-message" v-if="isError">
                 {{ errorMessage }}
             </div>
-            <div class="success-message" v-if="isSuccess">
-                Váš hlas byl úspěšně odeslán. Děkujeme!
-            </div>
         </form>
+        <div class="success-message" v-if="isSuccess">
+            Váš hlas byl úspěšně odeslán. Děkujeme!
+        </div>
         <p>
             Tady napsat, že mohou přispívat pouze naši zákazníci a dodavatelé a
             ať to nikam nesdílí, že hlasy neznámých osob nebuou uznány. Co zbyde
@@ -68,7 +73,7 @@
 
 <script>
 import Card from "@/components/Card.vue";
-import axios from "@/axios.js";
+import dogfishAPI from "@/axios.js";
 export default {
     components: {
         Card,
@@ -87,14 +92,28 @@ export default {
         assignCharity(charity) {
             this.charity = charity;
         },
+        async checkActivity() {
+            try {
+                let dogfishResponse = await dogfishAPI.get(
+                    `?action=isvoted&email=${this.email}`
+                );
+                if (dogfishResponse.data.isvoted) {
+                    this.isSuccess = true;
+                }
+            } catch (error) {
+                console.log(error.message);
+            }
+        },
         async vote() {
             try {
                 // Check if user has chosen charity
                 if (this.charity) {
-                    let dogfishResponse = await axios.post(
-                        `/?action=putvote&email=${this.email}&vote=${this.charity}&comment=${this.comment}`
+                    let comment = new FormData();
+                    comment.append("comment", this.comment);
+                    let dogfishResponse = await dogfishAPI.post(
+                        `/?action=putvote&email=${this.email}&vote=${this.charity}&comment=${this.comment}`,
+                        comment
                     );
-                    console.log(dogfishResponse.data);
 
                     // Check if e-mail is valid
                     if (!dogfishResponse.data.success) {
@@ -120,6 +139,7 @@ export default {
                     } else {
                         this.isError = false;
                         this.isSuccess = true;
+                        this.closeForm = true;
                     }
                 } else {
                     this.isError = true;
@@ -129,6 +149,9 @@ export default {
                 console.log(error.message);
             }
         },
+    },
+    created() {
+        this.checkActivity();
     },
 };
 </script>
@@ -265,12 +288,14 @@ textarea {
 }
 .error-message,
 .success-message {
+    text-align: center;
     font-weight: 600;
 }
 .error-message {
     color: $main-accent-color;
 }
 .success-message {
+    margin-top: 30px;
     color: #519259;
 }
 ::placeholder {
