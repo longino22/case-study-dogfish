@@ -122,19 +122,15 @@ export default {
                     if (!dogfishResponse.data.success) {
                         this.isError = true;
                         this.isSuccess = false;
-                        switch (true) {
-                            case dogfishResponse.data.reason ===
-                                "NOT_IN_WHITELIST":
+                        switch (dogfishResponse.data.reason) {
+                            case "NOT_IN_WHITELIST":
                                 this.errorMessage =
                                     "Váš e-mail jsme nenašli v našem systému";
                                 break;
-                            case dogfishResponse.data.reason ===
-                                "ALREADY_VOTED":
+                            case "ALREADY_VOTED":
                                 this.errorMessage = "Už jste hlasovali";
                                 break;
-                            case dogfishResponse.data.reason === "DB_ERROR" ||
-                                dogfishResponse.data.reason ===
-                                    "INSERT_DB_ERROR":
+                            case "DB_ERROR" || "INSERT_DB_ERROR":
                                 this.errorMessage =
                                     "Váš hlas se nepovedl uložit, zkuste to prosím znovu";
                                 break;
@@ -313,7 +309,13 @@ p {
 }
 @media screen and (min-width: 2000px) {
     .main-background {
-        height: 190vh;
+        height: 129vh;
+    }
+    .main-image {
+        object-position: bottom;
+    }
+    .description {
+        margin: 80px 350px 80px 350px;
     }
     p {
         margin-bottom: -300px;
@@ -343,7 +345,7 @@ p {
         transform: translateX(-50%);
     }
 }
-@media screen and (max-width: 700px) {
+@media screen and (max-width: 760px) {
     .logo {
         height: 100px;
         width: auto;
@@ -389,7 +391,7 @@ p {
         margin: 40px 30px 40px 30px;
     }
 }
-@media screen and (min-width: 700px) and (max-width: 1200px) {
+@media screen and (min-width: 760px) and (max-width: 1200px) {
     .logo {
         height: 100px;
         width: auto;
